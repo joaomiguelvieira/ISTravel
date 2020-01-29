@@ -37,7 +37,7 @@
  * 		operations as exchange two integers that envolves several
  * 		elementary operations.
  * */
-#define EXCH( A , B ) { int third; third = A; A = B; B = third; }
+#define EXCH(A, B) { int third; third = A; A = B; B = third; }
 
 /**
  * @def ERROR_<type>
@@ -101,18 +101,18 @@
  * @typedef void * Item
  * @brief Definition of type Item as a pointer for void.
  * */
-typedef void * Item;
+typedef void *Item;
 
 /* Controla os erros que o programa pode gerar */
-void makeException( int error_code );
+void makeException(int error_code);
 
 /* Codifica um transporte */
-int getTransportationFromString( char * transportation_s );
+int getTransportationFromString(char *transportation_s);
 
 /* Codifica uma restricao */
-int getRestriction( char * restriction_s );
+int getRestriction(char *restriction_s);
 
 /* Codifica o criterio de otimizacao */
-int getOptimizationCriterium( char * criterium );
+int getOptimizationCriterium(char *criterium);
 
 #endif

@@ -15,7 +15,7 @@
 #include "Defs.h"
 
 /* Criterium of comparation between two elements in the heap. */
-#define LESS( A , B ) ( ( h -> priority )[ A ] > ( h -> priority )[ B ] )
+#define LESS(A, B) ((h->priority)[A] > (h->priority)[B])
 
 /**
  * @typedef struct Heap_ Heap
@@ -24,40 +24,40 @@
 typedef struct Heap_ Heap;
 
 /* Elimina todos os elementos do heap */
-void cleanHeap( Heap * h );
+void cleanHeap(Heap *h);
 
 /* Insere um elemento no heap sem o reorganizar */
-int directInsert( Heap * h , int element );
+int directInsert(Heap *h, int element);
 
 /* Corrige um elemento em relacao aos seus inferiores */
-void fixDown( Heap * h , int k );
+void fixDown(Heap *h, int k);
 
 /* Corrige um elemento em relacao aos seus superiores */
-void fixUp( Heap * h , int k );
+void fixUp(Heap *h, int k);
 
 /* Liberta o heap */
-void freeHeap( Heap * h );
+void freeHeap(Heap *h);
 
 /* Funcao de sorting baseada em acervos */
-void heapSort( Heap * h );
+void heapSort(Heap *h);
 
 /* Converte uma tabela num heap */
-void heapify( Heap * h );
+void heapify(Heap *h);
 
 /* Insere um elemento no heap e repoe a condicao de acervo */
-int insert( Heap * h , int element );
+int insert(Heap *h, int element);
 
 /* Cria um novo heap */
-Heap * newHeap( int size , int * priority );
+Heap *newHeap(int size, int *priority);
 
 /* Remove o maior elemento do heap */
-int removeMax( Heap * h );
+int removeMax(Heap *h);
 
 /* Verifica se uma tabela e um acervo */
-int verifyHeap( Heap * h );
+int verifyHeap(Heap *h);
 
 /* Corrige a posicao de um elemento do acervo */
-void incPriority( Heap * heap , int index );
+void incPriority(Heap *heap, int index);
 
 /* Verifica se um acervo esta vazio */
-int isHeapEmpty( Heap * heap );
+int isHeapEmpty(Heap *heap);

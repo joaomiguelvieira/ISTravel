@@ -1,0 +1,142 @@
+\ProvidesPackage{myheader}
+
+\usepackage{etex}
+
+\usepackage[T1]{fontenc}
+\usepackage[portuges]{babel}
+
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{color}
+\usepackage{caption}
+
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=20mm,bmargin=20mm,lmargin=20mm,rmargin=20mm}
+
+%http://www.peteryu.ca/tutorials/publishing/latex_captions
+\captionsetup[figure]{labelfont=bf,textfont=it}
+\captionsetup[table]{labelfont=bf,textfont=it}
+
+\usepackage{comment}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}				% com isto temos a certeza que os cabeçalhos do capítulo e secção são em minúsculas.
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}  											% apagar as configurações actuais
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} 							% fazer espaço para o risco
+\fancypagestyle{plain}{
+	\fancyhead{} 										% Tirar cabeçalhos de página vazias
+	\renewcommand{\headrulewidth}{0pt}					% e o risco
+}
+
+% color definings
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{gray1}{gray}{0.80}
+
+% math packages
+\usepackage{amsfonts}
+\usepackage{empheq,amsmath}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{esint}
+\usepackage{array}
+
+% theorems
+\theoremstyle{definition}
+\declaretheorem[numberwithin=section,style=definition,name=Teorema,qed=$\blacksquare$]{teorema}
+\declaretheorem[numberwithin=teorema,style=definition,name=Lema,qed=$\blacksquare$]{lema}
+\declaretheorem[numberwithin=teorema,style=definition,name=Corolário,qed=$\blacksquare$]{cor}
+\declaretheorem[numberwithin=section,style=definition,name=Proposição,qed=$\blacksquare$]{prop}
+\declaretheorem[numberwithin=section,style=definition,name=Definição,qed=$\blacksquare$]{defi}
+\declaretheorem[numberwithin=defi,style=definition,name=Exemplo,qed=$\blacksquare$]{exemdefi}
+\declaretheorem[numberwithin=teorema,style=definition,name=Exemplo,qed=$\blacksquare$]{exemteo}
+\declaretheorem[numberwithin=section,style=definition,name=Exemplo,qed=$\blacksquare$]{exem}
+\declaretheorem[style=definition,name=A Recordar,qed=$\blacksquare$]{recorda}
+\declaretheorem[numberwithin=section,style=definition,name=Facto,qed=$\blacksquare$]{fact}
+\declaretheorem[numberwithin=section,style=definition,name=Nota,qed=$\blacksquare$]{note}
+
+% commands
+\newcommand{\bs}{\backslash}
+\newcommand{\linha}{\noindent\hrulefill}
+\newcommand{\reais}{\mathbb{R}}
+\newcommand{\complexos}{\mathbb{C}}
+\newcommand{\naturais}{\mathbb{N}}
+\newcommand{\inteiros}{\mathbb{Z}}
+\newcommand{\racionais}{\mathbb{Q}}
+\newcommand{\equi}{\Leftrightarrow}
+\newcommand{\vaipara}{\longrightarrow}
+\newcommand{\implica}{\Rightarrow}
+\newcommand{\implicado}{\Leftarrow}
+\newcommand{\notexists}{\mathcal{69}}
+\newcommand{\lnotimplica}{\not\Leftarrow}
+\newcommand{\logo}{\therefore}
+\newcommand{\vazio}{\emptyset}
+\newcommand{\definido}{\longmapsto}
+\newcommand{\hugeskip}{\vspace{1cm}}
+\newcommand{\til}{\thicksim}
+\newcommand{\ointcw}{\varointclockwise}		
+\newcommand{\ointncw}{\ointctrclockwise}
+\newcommand{\enum}[1]{\noindent\textbf{#1}}
+\newcommand{\dif}{\mathrm{d}}
+
+% operators
+\newcommand{\cis}{\operatorname{cis}}
+\newcommand{\Arg}{\operatorname{Arg}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Front}{\operatorname{Front}}
+\newcommand{\Int}{\operatorname{Int}}
+\newcommand{\Log}{\operatorname{Log}}
+\newcommand{\heq}{\hat{=}}
+\newcommand{\Res}{\operatorname{Res}}
+\renewcommand{\exp}{\operatorname{e}}
+\newcommand{\TL}{\operatorname{TL}}
+\newcommand{\m}[1]{\mathbf{#1}}
+
+% environments
+\newenvironment{gbox}{\par\noindent\adjustbox{frame=0pt,bgcolor=gray1,minipage=\linewidth}\bgroup}
+	{\egroup\par}
+\newenvironment{ybox}{\par\noindent\adjustbox{frame=0pt,bgcolor=yellow,minipage=\linewidth}\bgroup}
+	{\egroup\par}
+
+\usepackage{listings}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=C,                 % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  %title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}

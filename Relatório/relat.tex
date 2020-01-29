@@ -1,0 +1,338 @@
+\documentclass[a4paper,11pt,twosided]{report}
+\usepackage{myheader}
+
+\hyphenation{ Mestrado Integrado em Engenharia Eletrotécnica e de Computadores }
+
+\title{
+\parbox{5cm}{\centering\small\textbf{Mestrado Integrado em Engenharia Eletrotécnica e de Computadores}}\hfill
+\includegraphics[height=1cm]{imagens/ist.eps}\vfill
+{\Huge \textbf{Algoritmos e Estruturas de Dados}} \\[0.2cm] 2014/2015 - Segundo ano - Primeiro semestre \\[0.5cm] {\large Relatório do projeto} \\[0.2cm] {\LARGE\underline{\textbf{ISTravel}}} }
+\author{
+{\large\textbf{Grupo número 13}}\\[0.2cm]
+\begin{tabular}{rcl}
+\textbf{TOMÁS CARDOSO}		& número 79007	& tomas.cardoso@tecnico.ulisboa.pt			\\
+\textbf{JOÃO VIEIRA}			& número 79191	& joaomiguelvieira@tecnico.ulisboa.pt		\\\hline
+\end{tabular}
+}
+\date{\today.
+\vfill\hfill
+Docente: \textbf{Carlos Bispo}
+}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\maketitle
+
+\newpage\quad
+\newpage
+
+\tableofcontents
+
+\newpage\quad
+\newpage
+
+\pagestyle{fancy}
+
+\chapter*{Introdução}
+\addcontentsline{toc}{chapter}{Introdução}
+
+\section*{Descrição do problema}
+\addcontentsline{toc}{section}{Descrição do problema}
+
+O problema proposto pelo enunciado consiste, muito sinteticamente, em analisar um mapa de cidades que é transmitido à aplicação sob a forma de ficheiro de texto descrevendo todas as ligações entre as cidades vizinhas (numeradas de $1$ a $V$) e encontrar caminhos ótimos entre duas cidades segundo critérios de tempo e custo. As informações fornecidas acerca deste mapa foram:
+\begin{itemize}
+\item Uma ligação entre duas cidades é bidirecional, isto é, existe da cidade $A$ para a cidade $B$ e, igualmente, da cidade $B$ para a cidade $A$;
+\item Cada ligação é caracterizada por:
+\begin{itemize}
+\item Meio de transporte;
+\item Horário da ligação (hora do primeiro transporte, hora do último transporte e periodicidade da ligação);
+\item Custo da viagem.
+\end{itemize}
+\item As caracterizações das ligações não têm de ser congruentes com a realidade.
+\end{itemize}
+Pode ainda existir mais do que uma ligação entre duas cidades.
+
+A análise deste mapa permite a resolução do problema principal que é imposto: encontrar o caminho ótimo em tempo ou o caminho ótimo em custo entre duas cidades do mapa. Adicionalmente podem rejeitar-se ligações que sejam caras demais ou demorem demasiado tempo. Para esse efeito nem sequer se considera que tais ligações existem. Finda a resolução do problema pode ainda ser imposto um limite de tempo ou custo máximos para a solução, sendo que estas restrições têm, obrigatoriamente, que concordar com o critério de análise definido. Quando tal acontece verifica-se se a solução encontrada respeita o limite imposto. Se tal não acontecer a conclusão é que não há solução para o problema.
+
+\section*{Abordagem}
+\addcontentsline{toc}{section}{Abordagem}
+
+A natureza deste problema sugere claramente uma análise com recurso a grafos. Neste caso os vértices do grafo a analisar são as cidades do mapa enquanto as arestas correspondem às ligações entre elas. Visto que é dito que as ligações entre cidades são recíprocas, o grafo resultante não é direcionado. O problema que se pretende resolver tendo o grafo é do tipo ``origem para destino'' que passa por resolver um problema de ``origem para todos''. O algoritmo utilizado na resolução deste problema é o conhecido algoritmo de \emph{Dijkstra} com algumas modificações. Este algoritmo é descrito em mais detalhe na secção \ref{dijkstra} deste relatório. Este algoritmo determina a árvore de caminhos mais curtos entre o vértice de origem fixado e todos os outros vértices do grafo. Se não houver caminho entre dois vértices significa que os dois pertencem a sub-grafos que não estão ligados, o que na prática significa que não existe caminho possível entre as duas cidades.
+
+Há ainda que referir que, devido a questões de otimização de memória, o modelo de representação escolhido para o grafo foi de listas de adjacências. Isto deve-se ao facto de, na generalidade, a representação por matriz de adjacências ser completamente avassaladora no que toca à gestão de memória. A representação por matriz de adjacências tem uma complexidade total de utilização de memória de $O(N^2)$, que pode ser reduzida para $O(\frac{1}{2}N^2-\frac{N}{2})$ (se apenas for alocada metade da matriz - triangular superior ou inferior), o que para grafos esparsos significa uma má gestão de memória, pois apenas os índices $a_{ij}$ cujas cidades $i$ e $j$ possuam uma ligação serão relevantes, sendo todas as outras posições de memória desnecessárias.
+
+\chapter{Arquitetura}
+
+\section{Funcionamento das rotinas principais}
+
+O fluxograma ilustrado na figura \ref{fluxMain} representa a arquitetura da classe \texttt{ISTravel}. O código primário de funcionamento da aplicação baseia-se neste fluxograma, sendo que todas as funções mais específicas que são chamadas pelo mesmo estão implementadas noutras classes.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.6\linewidth]{imagens/fluxMain.eps}
+\captionof{figure}{Fluxograma da classe \texttt{ISTravel}.\label{fluxMain}}
+\end{figure} 
+
+O funcionamento da função principal, apesar de estar esquematizado na figura \ref{fluxMain} está, de certa forma, oculto por detrás da função \texttt{computeBestPath}, implementada pela interface \texttt{Utilities}. Esta interface não é mais do que uma lista de funções utilizadas pelo programa principal ou por outras funções da própria interface. De modo a deixar claro o funcionamento geral do programa, esquematiza-se ainda, na figura \ref{fluxComputeBestPath} o funcionamento da função \texttt{computeBestPath}.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=\linewidth]{imagens/fluxComputeBestPath.eps}
+\captionof{figure}{Fluxograma da rotina \texttt{computeBestPath} implementada em \texttt{Utilities.c}.\label{fluxComputeBestPath}}
+\end{figure}
+
+\section{Subsistemas funcionais e estruturas de dados}
+
+A estrutura escolhida durante o desenvolvimento do projeto apresenta-se na figura \ref{classes}. A linguagem utilizada faz uma analogia com linguagens de programação orientadas a objetos, mas um dos objetivos do planeamento deste projeto foi exatamente que assim fosse. Dos seis ficheiros de código além do ficheiro contentor do programa principal, apenas quatro deles representam subsistemas independentes, sendo que os os ficheiros \texttt{Defs.c} e \texttt{Utilities.c} implementam apenas funções sem declararem nenhuma nova estrutura de dados.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.7\linewidth]{imagens/classes.eps}
+\captionof{figure}{Estrutura principal e relação entre os subsistemas presentes no projeto.\label{classes}}
+\end{figure}
+
+\subsection{\texttt{Heap}}
+
+O subsistema \texttt{Heap} implementa um tipo muito particular de acervos. Os elementos aceites neste acervo são inteiros, todos eles são diferentes e o valor de nenhum deles excede o valor do último índice possível do acervo. Por outras palavras os seus elementos tem de ser os próprios índices da tabela. Além disso o critério de comparação que verifica se um elemento é maior do que outro é o peso do primeiro ser menor do que o peso do segundo. A condição de acervo utilizada é a de que o pai tem de ser sempre maior do que os seus dois filhos. 
+
+A estrutura de dados utilizada por esta classe dispõe de três vetores de inteiros:
+\begin{itemize}
+\item Um vetor que armazena os pesos dos elementos do acervo. O peso do elemento $i$ encontra-se armazenado na posição $i$ deste vetor;
+\item Outro que contem as posições dos $V$ elementos do acervo. A posição do elemento $i$ encontra-se na posição $i$ deste vetor;
+\item Um último vetor que contém os elemento do acervo sendo que o elemento na posição $0$ é sempre o mais prioritário.
+\end{itemize}
+Além dos vetores anteriormente enumerados, o acervo contem ainda a informação de qual o tamanho máximo que pode atingir e quantos elementos ele tem numa determinada altura. Este tipo de acervo é local, isto é, não é dinâmico, pelo que no ato de construção há que referir qual o tamanho máximo que o mesmo pode atingir. A figura \ref{heap} ilustra um exemplo de um acervo de tamanho 10.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.5\linewidth]{imagens/heap.eps}
+\captionof{figure}{Acervo de tamanho 10 com todas as posições ocupadas.\label{heap}}
+\end{figure}
+
+Os ficheiros onde este subsistema está implementado são \texttt{Heap.c} e \texttt{Heap.h}, sendo este último o \emph{header}. As assinaturas das funções existentes neste subsistema apresentam-se de seguida.
+
+\lstinputlisting[language=C, firstline=26, lastline=63]{codigo/Heap.h}
+
+\subsection{\texttt{LinkedList}}
+
+A classe \texttt{LinkedList} implementa listas genéricas simplesmente ligadas. A estrutura principal deste subsistema contém apenas dois ponteiros, um para o elemento seguinte e outro para uma estrutura desconhecida que está ``armazenada'' no elemento da lista.
+
+A figura \ref{linkedList} ilustra a estrutura da lista.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.3\linewidth]{imagens/linkedList.eps}
+\captionof{figure}{Estrutura de um elemento do subsistema \texttt{LinkedList}.\label{linkedList}}
+\end{figure}
+
+Os ficheiros onde este subsistema está implementado são \texttt{LinkedList.c} e \texttt{LinkedList.h}, sendo este último o \emph{header}. As assinaturas das funções existentes neste subsistema apresentam-se de seguida.
+
+\lstinputlisting[language=C, firstline=24, lastline=52]{codigo/LinkedList.h}
+
+\subsection{\texttt{Bridge}}
+
+Apesar de diminuto, o sistema \texttt{Bridge} também se pode considerar um subsistema funcional. As estruturas operadas neste sistema são nada mais do que campos de características respeitantes a uma determinada viagem. Os métodos destas estruturas são apenas o seu construtor, um libertador de memória e os \emph{setters} e \emph{getters} respeitantes aos seus campos. Os campos contidos nesta estrutura são:
+\begin{itemize}
+\item Transporte envolvido;
+\item Duração da viagem;
+\item Preço;
+\item Momento em que ocorre a primeira ligação;
+\item Momento a partir do qual não se efetuam mais ligações diárias;
+\item Periodicidade da ligação.
+\end{itemize}
+
+Esta estrutura nada sabe sobre as cidades envolvidas nesta ligação.
+
+Os ficheiros onde este subsistema está implementado são \texttt{Bridge.c} e \texttt{Bridge.h}, sendo este último o \emph{header}. As assinaturas das funções existentes neste subsistema apresentam-se de seguida.
+
+\lstinputlisting[language=C, firstline=25, lastline=47]{codigo/Bridge.h}
+
+\subsection{\texttt{Graph}}
+
+A classe \texttt{Graph} é talvez a mais completa das anteriormente enunciadas. O tipo de dados que a mesma manipula são estruturas de grafos baseados em listas de adjacências. Além da estrutura principal que contem o grafo, as listas de adjacências dos seus vértices e outros dois campos que são o número total de vértices e de arestas, existe ainda uma estrutura de dados secundária denominada \texttt{Link}. Esta estrutura é responsável por armazenar a informação respeitante a uma adjacência de um vértice no grafo, e tem apenas dois campos: um que indica o vértice ao qual o ``dono do \emph{link}'' tem a adjacência e outro que é um ponteiro para o peso dessa ligação que é abstrato ao grafo. A figura \ref{graph} representa sucintamente as estruturas de dados.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.7\linewidth]{imagens/graph.eps}
+\captionof{figure}{Ilustração da estrutura de um grafo baseado em listas de adjacências (meramente ilustrativo - a quantidade de listas de adjacências está incompleta, etc).\label{graph}}
+\end{figure}
+
+Acerca dos métodos deste subsistema, para além do algoritmo de \emph{Dijkstra} não há muito que dizer. Existem apenas construtores e destruidores das estruturas, \emph{setters} e \emph{getters} para os campos das mesmas e uma função que imprime no ecrã o conteúdo qualitativo das listas de adjacências do grafo, isto é, que vértices é que são adjacentes entre si.
+
+Os ficheiros onde este subsistema está implementado são \texttt{Graph.c} e \texttt{Graph.h}, sendo este último o \emph{header}. As assinaturas das funções existentes neste subsistema apresentam-se de seguida.
+
+\lstinputlisting[language=C, firstline=35, lastline=66]{codigo/Graph.h}
+
+\section{Interfaces}
+
+Como referido, existem ainda dois pares de ficheiros que não constituem subsistemas funcionais mas sim interfaces com funções utilizadas por outros subsistemas. Seguidamente mostram-se as assinaturas das funções da interface \texttt{Utilities} que estão descritas em \texttt{Utilities.h}
+
+\lstinputlisting[language=C, firstline=23, lastline=66]{codigo/Utilities.h}
+
+A interface \texttt{Defs.h} é mais pequena. Seguidamente mostram-se as assinaturas das funções que esta implementa.
+
+\lstinputlisting[language=C, firstline=106, lastline=116]{codigo/Defs.h}
+
+\chapter{Algoritmos}
+
+Os principais algoritmos usados neste projeto encontram-se implementados pelas funções \texttt{dijkstra} e \texttt{getMapFromFile}. Esta última é responsável por carregar toda a estrutura do grafo, enquanto o conhecido algoritmo de \emph{Dijkstra} calcula a árvore de caminhos mais curtos dado um vértice de referência. Existem outros algoritmos secundários mas não menos importantes para o correto funcionamento do programa. Neste capítulo será abordado também o método \texttt{getTime} que calcula o tempo que dura uma determinada ligação entre duas cidades.
+
+\section{Algoritmo de \emph{Dijkstra}}
+\label{dijkstra}
+O algoritmo de \emph{Dijkstra} é, senão um dos mais importantes, um dos mais utilizados na teoria de grafos. Este algoritmo determina os caminhos mais curtos entre um vértice fonte e todos os outros vértices do grafo, se existir algum caminho. Existe também um outro algoritmo, o de \emph{Floyd}, que resolve o género de problema ``todos para todos''.
+
+A complexidade do algoritmo de \emph{Dijkstra} utilizando acervos é $E\lg{V}$, sendo $E$ o número de arestas e $V$ o número de vértices.
+
+A figura \ref{fluxDijkstra} ilustra o funcionamento da variante com \emph{heaps} do algoritmo. Uma outra modificação efetuada foi o rompimento do algoritmo assim que seja encontrado o primeiro peso infinito. Isto deve-se ao facto de que, sendo o primeiro elemento do acervo o de maior prioridade, se o primeiro elemento tiver peso infinito todos os outros também têm, e, por isso, não possuem qualquer ligação ao grafo.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=\linewidth]{imagens/fluxDijkstra.eps}
+\captionof{figure}{Ilustração do funcionamento do algoritmo de \emph{Dijkstra} com acervos.\label{fluxDijkstra}}
+\end{figure}
+
+\section{\texttt{getMapFromFile}}
+\label{carrMap}
+O algoritmo implementado em \texttt{getMapFromFile} é o responsável por carregar toda a estrutura do grafo a partir do ficheiro. A figura \ref{getMapFromFile} ilustra o funcionamento desta rotina.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=\linewidth]{imagens/fluxGetMapFromFile.eps}
+\captionof{figure}{Fluxograma da rotina \texttt{getMapFromFile}.\label{getMapFromFile}}
+\end{figure}
+
+A complexidade deste algoritmo é de $O(EV)$. Isto porque se optou por fazer inserção direta das adjacências no grafo em vez de criar uma estrutura auxiliar que diminuísse a complexidade temporal deste processo. Como podem existir mais do que uma aresta entre duas cidades, decidiu-se que a melhor forma de otimizar temporalmente a análise do grafo seria agrupar as arestas que ligam duas cidades. Assim sendo, o campo \texttt{weight} de uma aresta não é, de facto, um peso mas uma lista de pesos em que o melhor será escolhido de acordo com os critérios de otimização e restrições atuais. Visto que por cada aresta que se quer inserir no grafo há que verificar se essas duas cidades já estão ligadas (verificar se uma está na lista de adjacências da outra), é necessário verificar, no pior caso, toda a lista de adjacências que, mais uma vez no pior caso, pode ter tamanho $V$. Assim sendo a complexidade total de inserção aproxima-se por $O(EV)$.
+
+\section{\texttt{getTime}}
+
+A rotina \texttt{getTime} constitui um algoritmo simples com complexidade de $O(1)$. A opção de explicitá-la aqui surgiu pelo facto de ser uma rotina importante que tem de determinar o tempo total de uma ligação que passa por determinar o tempo de espera por um transporte. A imagem \ref{getTime} ilustra o funcionamento desta rotina.
+
+\begin{figure}[htb]
+\centering\includegraphics[width=0.6\linewidth]{imagens/fluxGetTime.eps}
+\captionof{figure}{Fluxograma da rotina \texttt{getTime}.\label{getTime}}
+\end{figure}
+
+\chapter{Análise dos requisitos computacionais}
+
+\section{Carregamento do mapa}
+
+Sem dúvida alguma que a construção do grafo constitui um processo com uma complexidade temporal nada desprezável. Como analisado na secção \ref{carrMap}, a complexidade deste processo é proporcional a $EV$. Esta complexidade poderia ser diminuída através da utilização de uma matriz de adjacências temporária para onde seriam carregadas as arestas para posteriormente serem colocadas nas listas de adjacências do grafo. Acontece que este processo aumenta a complexidade de memória proporcionalmente a $V^2$, o que não é, de todo, desejável. Assim sendo opta-se por pagar o preço do tempo de computação extraordinário.
+
+\section{Principais algoritmos}
+Grande parte dos algoritmos recursivos utilizados neste programa apresentam complexidade linear. São exemplos: \texttt{getTotalTime}, \texttt{freeList}, \texttt{printPath}, etc.
+
+O algoritmo de \emph{Dijkstra} com recurso a acervos, como já foi dito anteriormente, tem uma complexidade da ordem de $E\lg{V}$.
+
+Todos os restantes métodos do programa têm complexidade não superior a $O(N)$, pelo que, excetuando o carregamento do mapa (que predomina), a maior das complexidades de tempo é dada pelo algoritmo de \emph{Dijkstra}.
+
+\section{Complexidade de memória}
+
+Acerca da utilização de memória, esta terá o seu pico durante a execução do algoritmo de \emph{Dijkstra}. Nesta fase do programa todo o grafo está em memória, além de um acervo que contém dois vetores de tamanho $V$ e três vetores adicionais, um de ponteiros para os pesos das ligações, outro com os pesos numéricos e um último que contém a \emph{shortest path tree}. Desta forma conclui-se que a complexidade total de memória do programa é proporcional a $E+6V\leadsto O(E+V)$.
+
+\chapter{Análise crítica}
+
+\section{Funcionamento do programa}
+
+Aquando da primeira submissão no \emph{Mooshak}, o programa passou em apenas 8 dos 20 testes de depuração para correto funcionamento devido a uma solução não ótima. Isto acontecia porque, no algoritmo de \emph{Dijkstra}, quando era retirado o máximo da fila de prioridades, não era feita a atualização e ordenação do vetor de posições. Após a correção deste problema, o programa já funcionou corretamente para todos os testes em termos da solução encontrada, tendo apenas chumbado em alguns por questões de memória ou tempo de execução. Com isto, foram feitas mais algumas alterações ao nível das estruturas utilizadas, o que permitiu passar a 18 testes dos 20.  
+Todas as decisões em termos de estruturas de dados e algoritmos foram sempre feitas tentando encontrar o melhor balanço entre memória ocupada e tempo de execução do programa, o que permitiu, no fim, concluir grande parte dos testes. Apesar de a solução proposta não ser ótima considera-se que a mesma é uma boa aproximação do que seria um algoritmo ótimo.
+
+\section{Melhorias possíveis e reconhecidas}
+
+O facto do programa desenvolvido reprovar em dois dos 20 testes ao qual foi submetido prova que a solução não é ótima. Acerca da complexidade de memória, pensa-se que seria possível reduzir a mesma atacando o problema nos acervos: reduzir o número de vetores dos quais o acervo depende (pois têm todos tamanho $V$). Seria possível também eliminar o vetor de ponteiros para pesos, contornando esta questão com outras estratégias, e isto deveria bastar para produzir alterações significativas no programa.
+
+No que toca à complexidade temporal, o verdadeiro problema está no carregamento do acervo. Julga-se que este problema poderia ser solucionado se as arestas fossem carregados para uma tabela de acervos inicialmente (a posição $i$ da tabela conteria todas as arestas respeitantes ao vértice i) e, por analogia com o algoritmo de \emph{Dijkstra}, as arestas seriam retiradas uma por uma do acervo seguindo a ordem dos índices dos vértices, o que faria com que fossem mais facilmente agrupadas. Este processo teria uma complexidade total menor que a do método usado que é proporcional a $EV$. A razão que levou à decisão de não proceder a esta modificação (além da escassez de tempo para a implementação) foi que este processo poderia representar um aumento da complexidade de memória, pelo que seria uma tentativa que significaria algum risco.
+
+\chapter{Exemplo detalhado}
+
+Considere-se o seguinte ficheiro de mapa:
+
+\begin{center}
+\fbox{
+\parbox{7cm}{
+\texttt{
+10 9\\
+5 4 autocarro 33 100 0 1440 60\\
+4 10 autocarro 33 100 0 1440 60\\
+10 1 autocarro 33 100 0 1440 60\\
+1 8 autocarro 33 100 0 1440 60\\
+8 6 autocarro 33 100 0 1440 60\\
+6 9 autocarro 33 100 0 1440 60\\
+9 3 autocarro 33 100 0 1440 60\\
+3 2 autocarro 33 100 0 1440 60\\
+2 7 autocarro 33 100 0 1440 60
+}}}
+\end{center}
+\captionof{figure}{Exemplo de ficheiro de mapa.}
+
+\medskip
+O mapa é carregado para o grafo através da rotina \texttt{getMapFromFile}. Neste caso o grafo terá 10 vértices e 9 arestas entre eles. Cada ligação é verificada separadamente, para apurar se já existe alguma ligação entre as duas cidades a que a mesma respeita. Depois da análise concluída a aresta deve ser inserida no grafo de uma das duas maneiras: o peso é adicionado a uma lista de pesos de uma aresta já existente ou é criada uma aresta de raiz.
+
+Seguidamente a função \texttt{computeBestPath} iniciará a resolução do problema principal, e começará a ler o ficheiro de clientes. Neste caso só existe um cliente:
+\begin{center}
+\texttt{1 5 7 0 custo 1 B2 1000}.
+\end{center}
+
+Começa-se por processar a informação relativa a este cliente, lendo, por ordem, o número de cliente, a cidade de origem, a cidade de destino, o momento a partir do qual o cliente está disponível para viajar, o critério de otimização escolhido, o número de restrições e poderão ser lidos um ou dois campos adicionais correspondentes às restrições.
+
+O critério de otimização é codificado pela função \texttt{getOptimizationCriterium}, as restrições são inicializadas a infinito e, por fim, as restrições impostas pelo cliente são definidas nos respetivos campos pela rotina \texttt{defineRestriction}.
+
+Após toda a informação sobre o cliente ter sido recolhida procede-se à resolução do problema recorrendo para isso ao algoritmo de \emph{Dijkstra}.
+
+O algoritmo de \emph{Dijkstra} começará por fazer a inicialização dos vetores dos quais vais fazer uso: todas as posições da \texttt{shortest path tree} a $-1$, todas as posições do vetor de pesos a $\infty$ e todas as posições do vetor de \emph{bridges} a \texttt{NULL}. Todos os vértices são ainda adicionados ao acervo. Seguidamente define que o peso da origem é $0$ (o que acontece por definição), e então o processo de cálculo da SPT começa.
+
+O vértice cujo peso é o mais baixo (mais prioritário) é retirado da fila prioritária, que no caso da primeira iteração será a própria origem cujo peso (critério de ordenação do acervo) é zero. De seguida procede-se à iteração da lista de adjacências do vértice retirado da fila, e para cada uma das adjacências verifica-se se esta minimiza a distância à origem de algum vértice ou caminho (relaxação de aresta e caminho, respetivamente), e, se for o caso, este vértice entra para a SPT para a posição dada pelo vértice retirado da fila (que lhe é adjacente) e a sua posição no acervo é corrigida. O peso da aresta é calculado externamente pela rotina \texttt{weigh} que calcula o peso tendo em conta as restrições do tipo A (se a aresta não as respeitar o peso será $\infty$) e o critério de otimização. No fim de analisar todas as adjacências do vértice volta-se a retirar outro da fila, que será novamente aquele que tiver peso menor. Se o seu peso for infinito o processo termina, pois os vértices restantes não têm ligação ao grafo, caso contrário repete-se o processo anterior até que tal aconteça ou que a fila fique vazia.
+
+Partindo do vértice 5, o algoritmo de \emph{Dijkstra} irá procurar, a cada iteração, o vértice que está mais próximo da origem. Quando encontra o que está mais próximo, adiciona à posição indexada por este na franja o seu sucessor na \emph{shortest path tree}.
+
+A tabela \ref{exemplo} descreve o percurso do algoritmo para este exemplo desde a primeira iteração até à última em que é obtida a árvore de caminhos mais curtos.
+
+\begin{table}[htb]
+\centering\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+	& 1		& 2		& 3		& 4		& 5		& 6		& 7		& 8		& 9		& 10		\\\hline
+5	& $\infty$	& $\infty$	& $\infty$	& 5/100	& -		& $\infty$	& $\infty$	& $\infty$	& $\infty$	& $\infty$	\\\hline
+4	& $\infty$	& $\infty$	& $\infty$	& -		& -		& $\infty$	& $\infty$	& $\infty$	& $\infty$	& 4/200	\\\hline
+10	& 10/300	& $\infty$	& $\infty$	& -		& -		& $\infty$	& $\infty$	& $\infty$	& $\infty$	& -		\\\hline
+1	& -		& $\infty$	& $\infty$	& -		& -		& $\infty$	& $\infty$	& 1/400	& $\infty$	& -		\\\hline
+8	& -		& $\infty$	& $\infty$	& -		& -		& 8/500	& $\infty$	& -		& $\infty$	& -		\\\hline
+6	& -		& $\infty$	& $\infty$	& -		& -		& -		& $\infty$	& -		& 6/600	& -		\\\hline
+9	& -		& $\infty$	& 3/700	& -		& -		& -		& $\infty$	& -		& -		& -		\\\hline
+3	& -		& 3/800	& -		& -		& -		& -		& $\infty$	& -		& -		& -		\\\hline
+2	& -		& -		& -		& -		& -		& -		& 2/900	& -		& -		& -		\\\hline
+7	& -		& -		& -		& -		& -		& -		& -		& -		& -		& -		\\\hline
+\end{tabular}
+\captionof{table}{Algoritmo de \emph{Dijkstra} aplicado ao exemplo.\label{exemplo}}
+\end{table}
+
+A franja final após a execução do algoritmo de \emph{Dijkstra} dá a árvore de caminhos mais curtos, sendo que em cada índice correspondente a um vértice está a cidade à qual este está ligado na SPT.
+
+\begin{table}[htb]
+\centering\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+1&2&3&4&5&6&7&8&9&10\\\hline
+10&3&9&5&-1&8&2&1&6&4\\\hline
+\end{tabular}
+\captionof{table}{Franja final (corresponde à SPT).}
+\end{table}
+
+A árvore de caminhos mais curtos, para este caso em específico, é linear, e pode ser representada por
+\begin{center}
+\texttt{5 - 4 - 10 - 1 - 8 - 6 - 9 - 3 - 2 - 7}.
+\end{center}
+
+Após a execução do algoritmo de \emph{Dijkstra}, o programa imprime no ficheiro de saída o caminho encontrado para cada cliente.
+
+Se o caminho não existir ou se não for cumprida a restrição do tipo B, caso exista, é impresso -1 na linha do cliente, se não, é chamada a função \texttt{printPath}, uma função recursiva, responsável por imprimir no ficheiro o caminho encontrado para o cliente segundo as diretrizes impostas.
+
+Finalmente, é necessário imprimir também o tempo total da viagem, chamando a função \texttt{getTotalTime}, caso não tenha sido calculado pelo algoritmo de \emph{Dijkstra} e o preço chamando a rotina \texttt{getTotalPrice}, caso o mesmo não tenha sido calculado.
+
+Neste exemplo, o cliente quer ir da cidade 5 para a 7, com o critério de otimização de custo e uma restrição do tipo B2, que diz que o custo total da viagem não pode ser superior a 1000 euros.
+
+Assim, recorrendo à SPT, verifica-se que o cliente terá de passar por todas as cidades para chegar à cidade 7. Utilizando o programa temos o seguinte ficheiro de saída:
+\begin{center}
+\texttt{1 5 autocarro 4 autocarro 10 autocarro 1 autocarro 8 autocarro 6 autocarro 9 autocarro 3 autocarro 2 autocarro 7 513 900}
+\end{center}
+
+Como se pode verificar, o custo total calculado é 900, que é menor que 1000, restrição imposta pelo cliente, pelo que foi encontrado um caminho dentro dos parâmetros impostos pelo cliente. 
+
+\chapter*{Bibliografia}
+\addcontentsline{toc}{chapter}{Bibliografia}
+\begin{enumerate}[(1)]
+\item Acetatos das aulas teóricas.
+\end{enumerate}
+
+\end{document}

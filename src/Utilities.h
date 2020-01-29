@@ -20,34 +20,34 @@
 #include "Bridge.h"
 #include "LinkedList.h"
 
-void usage( char ** argv );
+void usage(char **argv);
 
-int equalExtentions( char * string , char * extention );
+int equalExtentions(char *string, char *extention);
 
-char * saveString( char * string );
+char *saveString(char *string);
 
-char * getOutputFileName( char * input_filename , char * input_file_extention , char * output_file_extention );
+char *getOutputFileName(char *input_filename, char *input_file_extention, char *output_file_extention);
 
-Graph * getMapFromFile( char * map_filename );
+Graph *getMapFromFile(char *map_filename);
 
-void computeBestPath( Graph * map , char * client_filename , char * output_filename );
+void computeBestPath(Graph *map, char *client_filename, char *output_filename);
 
-int weigh( int counter , Item bridge , Item * efective_weight );
+int weigh(int counter, Item bridge, Item *efective_weight);
 
-int getTime( int counter , Bridge * bridge );
+int getTime(int counter, Bridge *bridge);
 
-void printPath( FILE * output_file , int * shortest_path_tree , Bridge ** bridges , int destination , int origin );
+void printPath(FILE *output_file, int *shortest_path_tree, Bridge **bridges, int destination, int origin);
 
-int getTotalPrice( int * shortest_path_tree , Bridge ** bridges , int origin , int destination );
+int getTotalPrice(int *shortest_path_tree, Bridge **bridges, int origin, int destination);
 
-int getTotalTime( int * shortest_path_tree , Bridge ** bridges , int origin , int destination );
+int getTotalTime(int *shortest_path_tree, Bridge **bridges, int origin, int destination);
 
-int followRestrictionsA( Bridge * bridge );
+int followRestrictionsA(Bridge *bridge);
 
-int followRestrictionsB( int weight );
+int followRestrictionsB(int weight);
 
-void defineRestriction( char * restriction , char * value );
+void defineRestriction(char *restriction, char *value);
 
-void freeWeight( Item weight );
+void freeWeight(Item weight);
 
 #endif

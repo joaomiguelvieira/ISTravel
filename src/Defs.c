@@ -20,49 +20,48 @@
  * 		Code passed by parameter to function exit() at the end.
  * @return None.
  * */
-void makeException( int error_code )
-{
-	/* If the program is working in a real machine, it can produce
-	 * outputs, otherwise, in a simulation, for example, it leads with
-	 * the errors by just quitting the application with code 0. */
-	#ifdef REAL_MACHINE
-		fprintf( stderr , "[ERROR] " );
-		
-		switch( error_code )
-		{
-			case ERROR_USAGE:
-				fprintf( stderr , "Bad usage.\n" );
-				break;
-			case ERROR_FILE_MAN:
-				fprintf( stderr , "File manipulation.\n" );
-				break;
-			case ERROR_FILE_EXTENTION:
-				fprintf( stderr , "Different extention from expected.\n" );
-				break;
-			case ERROR_MEMORY_ALLOCATION:
-				fprintf( stderr , "Could not allocate the required memory.\n" );
-				break;
-			case ERROR_UNINITIALIZED_STRUCTURE:
-				fprintf( stderr , "You are attempting to manipulate structures that where not initialized yet.\n" );
-				break;
-			case ERROR_CAMP_NOT_EXPECTED:
-				fprintf( stderr , "Was received a nonexpected camp while processing data. This may have to do with corrupted input data!\n" );
-				break;
-			case ERROR_FULL_MEMORY:
-				fprintf( stderr , "A certain quantity of allocated memory was exceded. Don't know what to do.\n" );
-				break;
-			case ERROR_OUT_OF_RANGE:
-				fprintf( stderr , "Attempting to access memory out of range.\n" );
-				break;
-			default:
-				fprintf( stderr , "Unknown error.\n" );
-		}
-	
-		exit( error_code );
-	#endif
-	
-	/* In case of outputs are not allowed. */
-	exit( 0 );
+void makeException(int error_code) {
+    /* If the program is working in a real machine, it can produce
+     * outputs, otherwise, in a simulation, for example, it leads with
+     * the errors by just quitting the application with code 0. */
+#ifdef REAL_MACHINE
+    fprintf( stderr , "[ERROR] " );
+
+    switch( error_code )
+    {
+        case ERROR_USAGE:
+            fprintf( stderr , "Bad usage.\n" );
+            break;
+        case ERROR_FILE_MAN:
+            fprintf( stderr , "File manipulation.\n" );
+            break;
+        case ERROR_FILE_EXTENTION:
+            fprintf( stderr , "Different extention from expected.\n" );
+            break;
+        case ERROR_MEMORY_ALLOCATION:
+            fprintf( stderr , "Could not allocate the required memory.\n" );
+            break;
+        case ERROR_UNINITIALIZED_STRUCTURE:
+            fprintf( stderr , "You are attempting to manipulate structures that where not initialized yet.\n" );
+            break;
+        case ERROR_CAMP_NOT_EXPECTED:
+            fprintf( stderr , "Was received a nonexpected camp while processing data. This may have to do with corrupted input data!\n" );
+            break;
+        case ERROR_FULL_MEMORY:
+            fprintf( stderr , "A certain quantity of allocated memory was exceded. Don't know what to do.\n" );
+            break;
+        case ERROR_OUT_OF_RANGE:
+            fprintf( stderr , "Attempting to access memory out of range.\n" );
+            break;
+        default:
+            fprintf( stderr , "Unknown error.\n" );
+    }
+
+    exit( error_code );
+#endif
+
+    /* In case of outputs are not allowed. */
+    exit(0);
 }
 
 /**
@@ -75,20 +74,19 @@ void makeException( int error_code )
  * @return int
  * 		Code of the transportation passed by parameter.
  * */
-int getTransportationFromString( char * transportation_s )
-{
-	if( strcmp( transportation_s , "autocarro" ) == 0 )
-		return BUS;
-	else if( strcmp( transportation_s , "aviao" ) == 0 )
-		return PLANE;
-	else if( strcmp( transportation_s , "comboio" ) == 0 )
-		return TRAIN;
-	else if( strcmp( transportation_s , "barco" ) == 0 )
-		return BOAT;
-	else
-		makeException( ERROR_CAMP_NOT_EXPECTED );
-	
-	return 0;
+int getTransportationFromString(char *transportation_s) {
+    if (strcmp(transportation_s, "autocarro") == 0)
+        return BUS;
+    else if (strcmp(transportation_s, "aviao") == 0)
+        return PLANE;
+    else if (strcmp(transportation_s, "comboio") == 0)
+        return TRAIN;
+    else if (strcmp(transportation_s, "barco") == 0)
+        return BOAT;
+    else
+        makeException(ERROR_CAMP_NOT_EXPECTED);
+
+    return 0;
 }
 
 /**
@@ -101,20 +99,19 @@ int getTransportationFromString( char * transportation_s )
  * @return int
  * 		Code of the restriction passed by parameter.
  * */
-int getRestriction( char * restriction_s )
-{
-	if( strcmp( restriction_s , "A1" ) == 0 )
-		return A1;
-	else if( strcmp( restriction_s , "A2" ) == 0 )
-		return A2;
-	else if( strcmp( restriction_s , "A3" ) == 0 )
-		return A3;
-	else if( strcmp( restriction_s , "B1" ) == 0 )
-		return B1;
-	else if( strcmp( restriction_s , "B2" ) == 0 )
-		return B2;
-	else
-		return -1;
+int getRestriction(char *restriction_s) {
+    if (strcmp(restriction_s, "A1") == 0)
+        return A1;
+    else if (strcmp(restriction_s, "A2") == 0)
+        return A2;
+    else if (strcmp(restriction_s, "A3") == 0)
+        return A3;
+    else if (strcmp(restriction_s, "B1") == 0)
+        return B1;
+    else if (strcmp(restriction_s, "B2") == 0)
+        return B2;
+    else
+        return -1;
 }
 
 /**
@@ -126,14 +123,13 @@ int getRestriction( char * restriction_s )
  * @return int
  * 		Codification of the chosen criterium.
  * */
-int getOptimizationCriterium( char * criterium )
-{
-	if( strcmp( criterium , "tempo" ) == 0 )
-		return TIME;
-	else if( strcmp( criterium , "custo" ) == 0 )
-		return COST;
-	else
-		makeException( ERROR_CAMP_NOT_EXPECTED );
-	
-	return 0;
+int getOptimizationCriterium(char *criterium) {
+    if (strcmp(criterium, "tempo") == 0)
+        return TIME;
+    else if (strcmp(criterium, "custo") == 0)
+        return COST;
+    else
+        makeException(ERROR_CAMP_NOT_EXPECTED);
+
+    return 0;
 }

@@ -9,7 +9,7 @@
  * */
 
 #ifndef LinkedListHeader
-#define	LinkedListHeader
+#define    LinkedListHeader
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,24 +21,24 @@
  * */
 typedef struct LinkedList_ LinkedList;
 
-LinkedList * initList();
+LinkedList *initList();
 
-LinkedList * insertUnsortedItemList( LinkedList * list , Item item );
+LinkedList *insertUnsortedItemList(LinkedList *list, Item item);
 
-LinkedList * insertSortedItemList( LinkedList * list , Item item , int ( * lessThan )( Item , Item ) );
+LinkedList *insertSortedItemList(LinkedList *list, Item item, int ( *lessThan )(Item, Item));
 
-LinkedList * getNextNodeList( LinkedList * node );
+LinkedList *getNextNodeList(LinkedList *node);
 
-LinkedList * getPreviousNodeList( LinkedList * list , LinkedList * node );
+LinkedList *getPreviousNodeList(LinkedList *list, LinkedList *node);
 
-Item getItemNode( LinkedList * node );
+Item getItemNode(LinkedList *node);
 
-void freeList( LinkedList * list , void ( * freeStructure )( Item ) );
+void freeList(LinkedList *list, void ( *freeStructure )(Item));
 
-void forEach( LinkedList * list , void ( * function )( Item ) );
+void forEach(LinkedList *list, void ( *function )(Item));
 
-int getListLenght( LinkedList * list );
+int getListLenght(LinkedList *list);
 
-void insertWithNoReturn( LinkedList * list , Item item );
+void insertWithNoReturn(LinkedList *list, Item item);
 
 #endif

@@ -15,7 +15,7 @@
 #include "Defs.h"
 
 /* Criterium of comparation between two elements in the heap. */
-#define LESS( A , B ) ( ( h -> priority )[ A ] > ( h -> priority )[ B ] )
+#define LESS(A, B) ((h->priority)[A] > (h->priority)[B])
 
 /**
  * @typedef struct Heap_ Heap
@@ -23,28 +23,28 @@
  * */
 typedef struct Heap_ Heap;
 
-void cleanHeap( Heap * h );
+void cleanHeap(Heap *h);
 
-int directInsert( Heap * h , int element );
+int directInsert(Heap *h, int element);
 
-void fixDown( Heap * h , int k );
+void fixDown(Heap *h, int k);
 
-void fixUp( Heap * h , int k );
+void fixUp(Heap *h, int k);
 
-void freeHeap( Heap * h );
+void freeHeap(Heap *h);
 
-void heapSort( Heap * h );
+void heapSort(Heap *h);
 
-void heapify( Heap * h );
+void heapify(Heap *h);
 
-int insert( Heap * h , int element );
+int insert(Heap *h, int element);
 
-Heap * newHeap( int size , int * priority );
+Heap *newHeap(int size, int *priority);
 
-int removeMax( Heap * h );
+int removeMax(Heap *h);
 
-int verifyHeap( Heap * h );
+int verifyHeap(Heap *h);
 
-void incPriority( Heap * heap , int index );
+void incPriority(Heap *heap, int index);
 
-int isHeapEmpty( Heap * heap );
+int isHeapEmpty(Heap *heap);

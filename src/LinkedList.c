@@ -17,10 +17,9 @@
  * @brief This structure contains the necessary fields of an linked
  * 		list's element.
  * */
-struct LinkedList_
-{
-	Item this;
-	LinkedList * next;
+struct LinkedList_ {
+    Item this;
+    LinkedList *next;
 };
 
 /**
@@ -29,11 +28,10 @@ struct LinkedList_
  * @return LinkedList *
  * 		Pointer to the initialized list.
  * */
-LinkedList * initList()
-{
-	/* To initilize a list we just have to put its first pointer to NULL
-	 * as it have no elements. */
-	return ( LinkedList * ) NULL;
+LinkedList *initList() {
+    /* To initilize a list we just have to put its first pointer to NULL
+     * as it have no elements. */
+    return (LinkedList *) NULL;
 }
 
 /**
@@ -46,22 +44,21 @@ LinkedList * initList()
  * @return LinkedList *
  * 		Pointer to beginning of the list.
  * */
-LinkedList * insertUnsortedItemList( LinkedList * list , Item item )
-{
-	LinkedList * new;
-	
-	/* Allocating the memory for the new element. */
-	new = ( LinkedList * ) malloc( sizeof( LinkedList ) );
-	if( new == ( LinkedList * ) NULL )
-		makeException( ERROR_MEMORY_ALLOCATION );
-	
-	/* Setting its value. */
-	( new -> this ) = item;
-	
-	/* Inserting the new element in the beggining of the list. */
-	( new -> next ) = list;
-	
-	return new;
+LinkedList *insertUnsortedItemList(LinkedList *list, Item item) {
+    LinkedList *new;
+
+    /* Allocating the memory for the new element. */
+    new = (LinkedList *) malloc(sizeof(LinkedList));
+    if (new == (LinkedList *) NULL)
+        makeException(ERROR_MEMORY_ALLOCATION);
+
+    /* Setting its value. */
+    (new->this) = item;
+
+    /* Inserting the new element in the beggining of the list. */
+    (new->next) = list;
+
+    return new;
 }
 
 /**
@@ -79,35 +76,31 @@ LinkedList * insertUnsortedItemList( LinkedList * list , Item item )
  * @return LinkedList *
  * 		Pointer to the beginning of the list.
  * */
-LinkedList * insertSortedItemList( LinkedList * list , Item item , int ( * lessThan )( Item , Item ) )
-{
-	LinkedList * new , * aux;
-	
-	new = ( LinkedList * ) malloc( sizeof( LinkedList ) );
-	if( new == ( LinkedList * ) NULL )
-		makeException( ERROR_MEMORY_ALLOCATION );
-	
-	( new -> this ) = item;
-	
-	/* If the list is empty or the insertion must be performed on the
-	 * beginning. The same if the new element is greater than the first. */
-	if( ( list == ( LinkedList * ) NULL ) || ( lessThan( item , list -> this ) ) )
-	{
-		( new -> next ) = list;
-		return new;
-	}
-	else
-	{
-		/* Otherwise we have to find the right place for the new element
-		 * in the list. */
-		for( aux = list ; ( ( aux -> next ) != ( LinkedList * ) NULL && 
-			!lessThan( item , aux -> next -> this ) ) ; aux = ( aux -> next ) );
-		
-		( new -> next ) = ( aux -> next );
-		( aux -> next ) = new;
-		
-		return list;
-	}
+LinkedList *insertSortedItemList(LinkedList *list, Item item, int ( *lessThan )(Item, Item)) {
+    LinkedList *new, *aux;
+
+    new = (LinkedList *) malloc(sizeof(LinkedList));
+    if (new == (LinkedList *) NULL)
+        makeException(ERROR_MEMORY_ALLOCATION);
+
+    (new->this) = item;
+
+    /* If the list is empty or the insertion must be performed on the
+     * beginning. The same if the new element is greater than the first. */
+    if ((list == (LinkedList *) NULL) || (lessThan(item, list->this))) {
+        (new->next) = list;
+        return new;
+    } else {
+        /* Otherwise we have to find the right place for the new element
+         * in the list. */
+        for (aux = list; ((aux->next) != (LinkedList *) NULL &&
+                          !lessThan(item, aux->next->this)); aux = (aux->next));
+
+        (new->next) = (aux->next);
+        (aux->next) = new;
+
+        return list;
+    }
 }
 
 /**
@@ -118,9 +111,8 @@ LinkedList * insertSortedItemList( LinkedList * list , Item item , int ( * lessT
  * @return LinkedList *
  * 		Node which follows the node passed through parameter.
  * */
-LinkedList * getNextNodeList( LinkedList * node )
-{	
-	return ( node == ( LinkedList * ) NULL ) ? ( LinkedList * ) NULL : ( node -> next );
+LinkedList *getNextNodeList(LinkedList *node) {
+    return (node == (LinkedList *) NULL) ? (LinkedList *) NULL : (node->next);
 }
 
 /**
@@ -137,18 +129,17 @@ LinkedList * getNextNodeList( LinkedList * node )
  * 		beginning until we find the node that predicts the one we passed
  * 		as argument. The complexity of this function is O(n).
  * */
-LinkedList * getPreviousNodeList( LinkedList * list , LinkedList * node )
-{
-	LinkedList * aux;
-	
-	if( node == list || node == ( LinkedList * ) NULL )
-		return ( LinkedList * ) NULL;
-	
-	/* We have to iterate the list until we find the node above the one
-	 * passed through parameter. */
-	for( aux = list ; ( aux -> next ) != node ; aux = ( aux -> next ) );
-	
-	return aux;
+LinkedList *getPreviousNodeList(LinkedList *list, LinkedList *node) {
+    LinkedList *aux;
+
+    if (node == list || node == (LinkedList *) NULL)
+        return (LinkedList *) NULL;
+
+    /* We have to iterate the list until we find the node above the one
+     * passed through parameter. */
+    for (aux = list; (aux->next) != node; aux = (aux->next));
+
+    return aux;
 }
 
 /**
@@ -159,9 +150,8 @@ LinkedList * getPreviousNodeList( LinkedList * list , LinkedList * node )
  * @return Item
  * 		Pointer to item storaged in the node passed by parameter.
  * */
-Item getItemNode( LinkedList * node )
-{
-	return ( node -> this );
+Item getItemNode(LinkedList *node) {
+    return (node->this);
 }
 
 /**
@@ -175,20 +165,19 @@ Item getItemNode( LinkedList * node )
  * 		structures that are unknown by the list's implementation.
  * @return None.
  * */
-void freeList( LinkedList * list , void ( * freeStructure )( Item ) )
-{
-	if( list == ( LinkedList * ) NULL )
-		return;
-	
-	if( ( list -> next ) != ( LinkedList * ) NULL )
-		freeList( list -> next , freeStructure );
-	
-	if( freeStructure != NULL )
-		freeStructure( list -> this );
-		
-	free( list );
-	
-	return;
+void freeList(LinkedList *list, void ( *freeStructure )(Item)) {
+    if (list == (LinkedList *) NULL)
+        return;
+
+    if ((list->next) != (LinkedList *) NULL)
+        freeList(list->next, freeStructure);
+
+    if (freeStructure != NULL)
+        freeStructure(list->this);
+
+    free(list);
+
+    return;
 }
 
 /**
@@ -201,14 +190,13 @@ void freeList( LinkedList * list , void ( * freeStructure )( Item ) )
  * 		Function to apply to each element of the list.
  * @return None.
  * */
-void forEach( LinkedList * list , void ( * function )( Item ) )
-{
-	LinkedList * aux;
-	
-	for( aux = list ; aux != ( LinkedList * ) NULL ; aux = ( aux -> next ) )
-		function( aux -> this );
-		
-	return;
+void forEach(LinkedList *list, void ( *function )(Item)) {
+    LinkedList *aux;
+
+    for (aux = list; aux != (LinkedList *) NULL; aux = (aux->next))
+        function(aux->this);
+
+    return;
 }
 
 /**
@@ -223,15 +211,14 @@ void forEach( LinkedList * list , void ( * function )( Item ) )
  * 		elements on it. So the complexity of this function is linear
  * 		O(N).
  * */
-int getListLenght( LinkedList * list )
-{		
-	int lenght;
-	LinkedList * aux;
-	
-	/* The list shell be iterated to count the number of elements in it. */
-	for( ( lenght = 0 , aux = list ) ; aux != ( LinkedList * ) NULL ; ( aux = ( aux -> next ) , lenght++ ) );
-	
-	return lenght;
+int getListLenght(LinkedList *list) {
+    int lenght;
+    LinkedList *aux;
+
+    /* The list shell be iterated to count the number of elements in it. */
+    for ((lenght = 0, aux = list); aux != (LinkedList *) NULL; (aux = (aux->next), lenght++));
+
+    return lenght;
 }
 
 /**
@@ -245,20 +232,19 @@ int getListLenght( LinkedList * list )
  * @param Item item
  * 		Item we want to insert in the list.
  * */
-void insertWithNoReturn( LinkedList * list , Item item )
-{
-	LinkedList * new;
-	
-	/* Allocating the memory for the new element. */
-	new = ( LinkedList * ) malloc( sizeof( LinkedList ) );
-	if( new == ( LinkedList * ) NULL )
-		makeException( ERROR_MEMORY_ALLOCATION );
-	
-	/* Setting its value. */
-	( new -> this ) = item;
-	
-	( new -> next ) = ( list -> next );
-	( list -> next ) = new;
-	
-	return;
+void insertWithNoReturn(LinkedList *list, Item item) {
+    LinkedList *new;
+
+    /* Allocating the memory for the new element. */
+    new = (LinkedList *) malloc(sizeof(LinkedList));
+    if (new == (LinkedList *) NULL)
+        makeException(ERROR_MEMORY_ALLOCATION);
+
+    /* Setting its value. */
+    (new->this) = item;
+
+    (new->next) = (list->next);
+    (list->next) = new;
+
+    return;
 }

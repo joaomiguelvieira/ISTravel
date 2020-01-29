@@ -32,27 +32,27 @@ typedef struct Graph_ Graph;
  * */
 typedef struct Link_ Link;
 
-Graph * graphInit( int vertices , int bridges , void ( * freeWeight )( Item ) );
+Graph *graphInit(int vertices, int bridges, void ( *freeWeight )(Item));
 
-void graphLinkInsert( Graph * graph , int city1 , int city2 , Item weight );
+void graphLinkInsert(Graph *graph, int city1, int city2, Item weight);
 
-void freeGraph( Graph * graph );
+void freeGraph(Graph *graph);
 
-Link * newLink( int vertice , Item weight );
+Link *newLink(int vertice, Item weight);
 
-void dijkstra( Graph * graph , int origin , int * shortest_path_tree , Item * bridges , 
-	int ( * weigh )( int , Item , Item * ) , int * weights , Heap * priority_queue );
+void dijkstra(Graph *graph, int origin, int *shortest_path_tree, Item *bridges,
+              int ( *weigh )(int, Item, Item *), int *weights, Heap *priority_queue);
 
-int getVertice( Link * link );
+int getVertice(Link *link);
 
-Item getWeight( Link * link );
+Item getWeight(Link *link);
 
-int getNumberOfVertices( Graph * graph );
+int getNumberOfVertices(Graph *graph);
 
-void printGraph( Graph * graph );
+void printGraph(Graph *graph);
 
-LinkedList * getAdjacencies( Graph * graph , int vertice );
+LinkedList *getAdjacencies(Graph *graph, int vertice);
 
-void setWeight( Link * link , Item weight );
+void setWeight(Link *link, Item weight);
 
 #endif

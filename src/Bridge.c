@@ -17,14 +17,13 @@
  * 		associated to a edge.
  * */
 
-struct Bridge_
-{
-	int transportation;
-	int duration;
-	int price;
-	int first_travel;
-	int no_more_travels;
-	int period;
+struct Bridge_ {
+    int transportation;
+    int duration;
+    int price;
+    int first_travel;
+    int no_more_travels;
+    int period;
 };
 
 /**
@@ -36,9 +35,8 @@ struct Bridge_
  * @return int
  * 		Type of transportation involved.
  * */
-int getTransportation( Bridge * bridge )
-{
-	return ( bridge -> transportation );
+int getTransportation(Bridge *bridge) {
+    return (bridge->transportation);
 }
 
 /**
@@ -49,9 +47,8 @@ int getTransportation( Bridge * bridge )
  * @return int
  * 		Duration of the travel.
  * */
-int getDuration( Bridge * bridge )
-{
-	return ( bridge -> duration );
+int getDuration(Bridge *bridge) {
+    return (bridge->duration);
 }
 
 /**
@@ -62,9 +59,8 @@ int getDuration( Bridge * bridge )
  * @return int
  * 		Price of the travel.
  * */
-int getPrice( Bridge * bridge )
-{
-	return ( bridge -> price );
+int getPrice(Bridge *bridge) {
+    return (bridge->price);
 }
 
 /**
@@ -76,9 +72,8 @@ int getPrice( Bridge * bridge )
  * @return int
  * 		First travel's hour.
  * */
-int getFirstTravel( Bridge * bridge )
-{
-	return ( bridge -> first_travel );
+int getFirstTravel(Bridge *bridge) {
+    return (bridge->first_travel);
 }
 
 /**
@@ -90,9 +85,8 @@ int getFirstTravel( Bridge * bridge )
  * @return int
  * 		After this hour does not occur more travels.
  * */
-int getNoMoreTravels( Bridge * bridge )
-{
-	return ( bridge -> no_more_travels );
+int getNoMoreTravels(Bridge *bridge) {
+    return (bridge->no_more_travels);
 }
 
 /**
@@ -104,9 +98,8 @@ int getNoMoreTravels( Bridge * bridge )
  * @return int
  * 		Period of the avaliated connection.
  * */
-int getPeriod( Bridge * bridge )
-{
-	return ( bridge -> period );
+int getPeriod(Bridge *bridge) {
+    return (bridge->period);
 }
 
 /**
@@ -129,25 +122,24 @@ int getPeriod( Bridge * bridge )
  * 		Returns the correspondent bridge buit with the parameters passed
  * 		by argument.
  * */
-Bridge * newBridge( int transportation , int duration , int price ,
-	int first_travel , int no_more_travels , int period )
-{
-	Bridge * new;
-	
-	/* Allocating the memory for the new bridge. */
-	new = ( Bridge * ) malloc( sizeof( Bridge ) );
-	if( new == ( Bridge * ) NULL )
-		makeException( ERROR_MEMORY_ALLOCATION );
-	
-	/* Setting all the values of the new bridge. */
-	( new -> transportation ) = transportation;
-	( new -> duration ) = duration;
-	( new -> price ) = price;
-	( new -> first_travel ) = first_travel;
-	( new -> no_more_travels ) = no_more_travels;
-	( new -> period ) = period;
-	
-	return new;
+Bridge *newBridge(int transportation, int duration, int price,
+                  int first_travel, int no_more_travels, int period) {
+    Bridge *new;
+
+    /* Allocating the memory for the new bridge. */
+    new = (Bridge *) malloc(sizeof(Bridge));
+    if (new == (Bridge *) NULL)
+        makeException(ERROR_MEMORY_ALLOCATION);
+
+    /* Setting all the values of the new bridge. */
+    (new->transportation) = transportation;
+    (new->duration) = duration;
+    (new->price) = price;
+    (new->first_travel) = first_travel;
+    (new->no_more_travels) = no_more_travels;
+    (new->period) = period;
+
+    return new;
 }
 
 /**
@@ -159,12 +151,11 @@ Bridge * newBridge( int transportation , int duration , int price ,
  * 		we need to do a cast.
  * @return None.
  * */
-void freeBridge( Item bridge )
-{
-	/* In this case, the structure bridge does not have any dynamic
-	 * memory associated to it, so to release the all structure we just
-	 * have to do a simple free of the pointer. */
-	free( ( Bridge * ) bridge );
-	
-	return;
+void freeBridge(Item bridge) {
+    /* In this case, the structure bridge does not have any dynamic
+     * memory associated to it, so to release the all structure we just
+     * have to do a simple free of the pointer. */
+    free((Bridge *) bridge);
+
+    return;
 }
